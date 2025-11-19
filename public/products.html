@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Danh sách sản phẩm</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <nav class="top-nav">
+      <div>
+        <strong>Danh sách sản phẩm</strong>
+      </div>
+      <div class="nav-right">
+        <span id="currentUser">Khách</span>
+        <button id="logoutBtn" class="plain">Đăng xuất</button>
+      </div>
+    </nav>
+
+    <main class="products-page">
+      <aside>
+        <h3>Bộ lọc</h3>
+        <select id="categoryFilter">
+          <option value="all">Tất cả</option>
+          <option value="Điện thoại">Điện thoại</option>
+          <option value="Laptop">Laptop</option>
+          <option value="Phụ kiện">Phụ kiện</option>
+        </select>
+      </aside>
+      <section>
+        <div id="productGrid" class="grid"></div>
+        <p id="statusText" class="status">Chọn danh mục để tải sản phẩm</p>
+      </section>
+    </main>
+
+    <div id="sentinel"></div>
+    <script src="js/products.js" type="module"></script>
+  </body>
+</html>

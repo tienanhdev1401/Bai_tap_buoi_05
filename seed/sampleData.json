@@ -1,0 +1,80 @@
+{
+  "users": [
+    { "name": "Admin One", "email": "admin@example.com", "password": "admin123", "role": "admin" },
+    { "name": "Admin Two", "email": "lead@example.com", "password": "admin123", "role": "admin" },
+    { "name": "User Demo", "email": "user1@example.com", "password": "user1234", "role": "user" },
+    { "name": "User Beta", "email": "user2@example.com", "password": "user1234", "role": "user" }
+  ],
+  "products": [
+    {
+      "name": "iPhone 15",
+      "description": "Điện thoại flagship mới nhất",
+      "category": "Điện thoại",
+      "price": 28000000,
+      "imageUrl": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9"
+    },
+    {
+      "name": "Samsung Galaxy S23",
+      "description": "Mạnh mẽ, pin lâu",
+      "category": "Điện thoại",
+      "price": 22000000,
+      "imageUrl": "https://images.unsplash.com/photo-1512499617640-c2f999098c01"
+    },
+    {
+      "name": "MacBook Air M2",
+      "description": "Laptop siêu nhẹ cho công việc",
+      "category": "Laptop",
+      "price": 32000000,
+      "imageUrl": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8"
+    },
+    {
+      "name": "Dell XPS 13",
+      "description": "Thiết kế viền siêu mỏng",
+      "category": "Laptop",
+      "price": 28000000,
+      "imageUrl": "https://images.unsplash.com/photo-1517430816045-df4b7de11d1d"
+    },
+    {
+      "name": "Logitech MX Master 3",
+      "description": "Chuột không dây ergonomic",
+      "category": "Phụ kiện",
+      "price": 2800000,
+      "imageUrl": "https://images.unsplash.com/photo-1587829741301-dc798b83add3"
+    },
+    {
+      "name": "Tai nghe Sony WH-1000XM5",
+      "description": "Chống ồn chủ động",
+      "category": "Phụ kiện",
+      "price": 8900000,
+      "imageUrl": "https://images.unsplash.com/photo-1487215078519-e21cc028cb29"
+    },
+    {
+      "name": "Apple Watch Series 9",
+      "description": "Đồng hồ thông minh đa năng",
+      "category": "Phụ kiện",
+      "price": 12000000,
+      "imageUrl": "https://images.unsplash.com/photo-1511707171634-39b746fd61e6"
+    },
+    {
+      "name": "Kindle Paperwhite",
+      "description": "Thiết bị đọc sách chống chói",
+      "category": "Phụ kiện",
+      "price": 3500000,
+      "imageUrl": "https://images.unsplash.com/photo-1513475382585-d06e58bcb0ea"
+    },
+    {
+      "name": "Lenovo Legion 5",
+      "description": "Laptop gaming tản nhiệt tốt",
+      "category": "Laptop",
+      "price": 26000000,
+      "imageUrl": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8"
+    },
+    {
+      "name": "Xiaomi Redmi Note 12",
+      "description": "Giá tốt cấu hình ổn",
+      "category": "Điện thoại",
+      "price": 7500000,
+      "imageUrl": "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85"
+    }
+  ]
+}
