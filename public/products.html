@@ -9,7 +9,7 @@
   <body>
     <nav class="top-nav">
       <div>
-        <strong>Danh sách sản phẩm</strong>
+        <strong>Sản phẩm nổi bật</strong>
       </div>
       <div class="nav-right">
         <span id="currentUser">Khách</span>
@@ -19,17 +19,60 @@
 
     <main class="products-page">
       <aside>
-        <h3>Bộ lọc</h3>
-        <select id="categoryFilter">
-          <option value="all">Tất cả</option>
-          <option value="Điện thoại">Điện thoại</option>
-          <option value="Laptop">Laptop</option>
-          <option value="Phụ kiện">Phụ kiện</option>
-        </select>
+        <h3>Bộ lọc nâng cao</h3>
+        <form id="filterForm" class="filter-form">
+          <label for="searchInput">Tìm kiếm (fuzzy)</label>
+          <input type="text" id="searchInput" placeholder="Nhập tên, tag, danh mục..." />
+
+          <label for="categoryFilter">Danh mục</label>
+          <select id="categoryFilter">
+            <option value="all">Tất cả</option>
+            <option value="Điện thoại">Điện thoại</option>
+            <option value="Laptop">Laptop</option>
+            <option value="Phụ kiện">Phụ kiện</option>
+          </select>
+
+          <div class="grid-2">
+            <div>
+              <label for="minPrice">Giá từ</label>
+              <input type="number" id="minPrice" min="0" placeholder="0" />
+            </div>
+            <div>
+              <label for="maxPrice">Giá đến</label>
+              <input type="number" id="maxPrice" min="0" placeholder="50000000" />
+            </div>
+          </div>
+
+          <label for="minDiscount">Khuyến mãi từ (%)</label>
+          <input type="number" id="minDiscount" min="0" max="100" placeholder="10" />
+
+          <label for="minViews">Lượt xem tối thiểu</label>
+          <input type="number" id="minViews" min="0" placeholder="1000" />
+
+          <label class="checkbox">
+            <input type="checkbox" id="saleOnly" /> Chỉ hiển thị sản phẩm đang giảm giá
+          </label>
+
+          <label for="sortBy">Sắp xếp</label>
+          <select id="sortBy">
+            <option value="newest">Mới nhất</option>
+            <option value="priceAsc">Giá tăng dần</option>
+            <option value="priceDesc">Giá giảm dần</option>
+            <option value="discount">Khuyến mãi cao</option>
+            <option value="views">Lượt xem cao</option>
+          </select>
+
+          <div class="filter-actions">
+            <button type="submit">Áp dụng</button>
+            <button type="button" id="resetFilters" class="ghost">Đặt lại</button>
+          </div>
+        </form>
       </aside>
+
       <section>
         <div id="productGrid" class="grid"></div>
-        <p id="statusText" class="status">Chọn danh mục để tải sản phẩm</p>
+        <p id="statusText" class="status">Nhập từ khoá hoặc cuộn xuống để tải thêm sản phẩm</p>
+        <button id="loadMoreBtn" class="ghost load-more">Tải thêm sản phẩm</button>
       </section>
     </main>
 

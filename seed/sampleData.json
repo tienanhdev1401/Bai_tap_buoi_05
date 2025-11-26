@@ -11,6 +11,10 @@
       "description": "Điện thoại flagship mới nhất",
       "category": "Điện thoại",
       "price": 28000000,
+      "discountPercent": 10,
+      "isOnSale": true,
+      "views": 3200,
+      "tags": ["iphone", "apple", "flagship"],
       "imageUrl": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9"
     },
     {
@@ -18,6 +22,10 @@
       "description": "Mạnh mẽ, pin lâu",
       "category": "Điện thoại",
       "price": 22000000,
+      "discountPercent": 12,
+      "isOnSale": true,
+      "views": 2400,
+      "tags": ["samsung", "android", "flagship"],
       "imageUrl": "https://images.unsplash.com/photo-1512499617640-c2f999098c01"
     },
     {
@@ -25,6 +33,10 @@
       "description": "Laptop siêu nhẹ cho công việc",
       "category": "Laptop",
       "price": 32000000,
+      "discountPercent": 5,
+      "isOnSale": true,
+      "views": 4100,
+      "tags": ["apple", "macbook", "ultrabook"],
       "imageUrl": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8"
     },
     {
@@ -32,6 +44,10 @@
       "description": "Thiết kế viền siêu mỏng",
       "category": "Laptop",
       "price": 28000000,
+      "discountPercent": 7,
+      "isOnSale": false,
+      "views": 1950,
+      "tags": ["dell", "xps", "ultrabook"],
       "imageUrl": "https://images.unsplash.com/photo-1517430816045-df4b7de11d1d"
     },
     {
@@ -39,6 +55,10 @@
       "description": "Chuột không dây ergonomic",
       "category": "Phụ kiện",
       "price": 2800000,
+      "discountPercent": 15,
+      "isOnSale": true,
+      "views": 5100,
+      "tags": ["logitech", "mouse", "office"],
       "imageUrl": "https://images.unsplash.com/photo-1587829741301-dc798b83add3"
     },
     {
@@ -46,6 +66,10 @@
       "description": "Chống ồn chủ động",
       "category": "Phụ kiện",
       "price": 8900000,
+      "discountPercent": 20,
+      "isOnSale": true,
+      "views": 6200,
+      "tags": ["sony", "headphone", "noise-cancelling"],
       "imageUrl": "https://images.unsplash.com/photo-1487215078519-e21cc028cb29"
     },
     {
@@ -53,6 +77,10 @@
       "description": "Đồng hồ thông minh đa năng",
       "category": "Phụ kiện",
       "price": 12000000,
+      "discountPercent": 8,
+      "isOnSale": false,
+      "views": 1700,
+      "tags": ["apple", "watch", "wearable"],
       "imageUrl": "https://images.unsplash.com/photo-1511707171634-39b746fd61e6"
     },
     {
@@ -60,6 +88,10 @@
       "description": "Thiết bị đọc sách chống chói",
       "category": "Phụ kiện",
       "price": 3500000,
+      "discountPercent": 18,
+      "isOnSale": true,
+      "views": 2800,
+      "tags": ["amazon", "ebook", "reading"],
       "imageUrl": "https://images.unsplash.com/photo-1513475382585-d06e58bcb0ea"
     },
     {
@@ -67,6 +99,10 @@
       "description": "Laptop gaming tản nhiệt tốt",
       "category": "Laptop",
       "price": 26000000,
+      "discountPercent": 10,
+      "isOnSale": true,
+      "views": 5300,
+      "tags": ["lenovo", "gaming", "legion"],
       "imageUrl": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8"
     },
     {
@@ -74,6 +110,10 @@
       "description": "Giá tốt cấu hình ổn",
       "category": "Điện thoại",
       "price": 7500000,
+      "discountPercent": 5,
+      "isOnSale": false,
+      "views": 1400,
+      "tags": ["xiaomi", "android", "budget"],
       "imageUrl": "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85"
     }
   ]

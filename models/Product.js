@@ -24,8 +24,29 @@ const productSchema = new mongoose.Schema(
       type: String,
       default: '',
     },
+    discountPercent: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 100,
+    },
+    isOnSale: {
+      type: Boolean,
+      default: false,
+    },
+    views: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    tags: {
+      type: [String],
+      default: [],
+    },
   },
   { timestamps: true }
 );
+
+productSchema.index({ name: 'text', description: 'text', category: 'text', tags: 'text' });
 
 module.exports = mongoose.model('Product', productSchema);

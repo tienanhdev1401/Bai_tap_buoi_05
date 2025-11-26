@@ -23,6 +23,10 @@ const createProductValidation = {
     category: Joi.string().required(),
     price: Joi.number().positive().required(),
     imageUrl: Joi.string().uri().allow('', null),
+    discountPercent: Joi.number().min(0).max(100).optional(),
+    isOnSale: Joi.boolean().optional(),
+    views: Joi.number().min(0).optional(),
+    tags: Joi.array().items(Joi.string()).optional(),
   }),
 };
 

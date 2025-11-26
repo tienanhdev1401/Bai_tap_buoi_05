@@ -7,20 +7,81 @@ const { createProductValidation } = require('../middleware/validators');
 const router = express.Router();
 
 router.get('/', authenticate, async (req, res) => {
-  const { category = 'all', page = 1, limit = 6 } = req.query;
-  const filters = category === 'all' ? {} : { category };
-  const pageNumber = Number(page) || 1;
-  const pageSize = Number(limit) || 6;
+  const {
+    category = 'all',
+    page = 1,
+    limit = 6,
+    q = '',
+    minPrice,
+    maxPrice,
+    minDiscount,
+    minViews,
+    onSale,
+    sortBy = 'newest',
+  } = req.query;
 
-  const products = await Product.find(filters)
-    .sort({ createdAt: -1 })
+  const pageNumber = Math.max(Number(page) || 1, 1);
+  const pageSize = Math.min(Math.max(Number(limit) || 6, 1), 24);
+
+  const filters = {};
+  if (category !== 'all') {
+    filters.category = category;
+  }
+
+  if (q && q.trim().length > 0) {
+    const normalized = q.trim().replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&');
+    const fuzzyPattern = normalized.split(/\s+/).join('.*');
+    const fuzzyRegex = new RegExp(fuzzyPattern, 'i');
+    filters.$or = [
+      { name: fuzzyRegex },
+      { description: fuzzyRegex },
+      { category: fuzzyRegex },
+      { tags: fuzzyRegex },
+    ];
+  }
+
+  const priceRange = {};
+  if (minPrice) priceRange.$gte = Number(minPrice);
+  if (maxPrice) priceRange.$lte = Number(maxPrice);
+  if (Object.keys(priceRange).length) {
+    filters.price = priceRange;
+  }
+
+  if (minDiscount) {
+    filters.discountPercent = { $gte: Number(minDiscount) };
+  }
+
+  if (minViews) {
+    filters.views = { $gte: Number(minViews) };
+  }
+
+  if (onSale === 'true') {
+    filters.isOnSale = true;
+  }
+
+  const sortOptions = {
+    newest: { createdAt: -1 },
+    priceAsc: { price: 1 },
+    priceDesc: { price: -1 },
+    discount: { discountPercent: -1 },
+    views: { views: -1 },
+  };
+  const sortRule = sortOptions[sortBy] || sortOptions.newest;
+
+  const query = Product.find(filters)
+    .sort(sortRule)
     .skip((pageNumber - 1) * pageSize)
     .limit(pageSize);
 
-  const total = await Product.countDocuments(filters);
-  const hasMore = pageNumber * pageSize < total;
+  const [products, total] = await Promise.all([
+    query,
+    Product.countDocuments(filters),
+  ]);
 
-  res.json({ products, total, hasMore });
+  const hasMore = pageNumber * pageSize < total;
+  const totalPages = Math.ceil(total / pageSize) || 1;
+
+  res.json({ products, total, totalPages, hasMore });
 });
 
 router.post(
