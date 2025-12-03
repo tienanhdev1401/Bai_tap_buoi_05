@@ -7,7 +7,7 @@ function redirectByRole(role) {
     window.location.href = 'admin.html';
     return;
   }
-  window.location.href = 'products.html';
+  window.location.href = 'cart.html';
 }
 
 function autoRedirectIfAuthenticated() {

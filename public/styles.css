@@ -86,6 +86,20 @@ button.plain:hover {
 button.plain {
   margin-left: 12px;
 }
+a.plain {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: #2563eb;
+  border: 1px solid transparent;
+  transition: background 0.2s, border-color 0.2s;
+}
+a.plain:hover {
+  background: rgba(37, 99, 235, 0.08);
+  border-color: rgba(37, 99, 235, 0.2);
+}
 .muted {
   color: #64748b;
 }
@@ -219,6 +233,27 @@ button.plain {
 }
 .card h4 {
   margin: 12px 0 4px;
+}
+.card-actions {
+  margin-top: 14px;
+}
+.add-to-cart-btn {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: none;
+  background: #2563eb;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.add-to-cart-btn:hover {
+  background: #1d4ed8;
+}
+.add-to-cart-btn:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
 }
 .price-row {
   display: flex;

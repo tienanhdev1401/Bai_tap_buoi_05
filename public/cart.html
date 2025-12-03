@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Giỏ hàng của bạn</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="cart-app/cart-app.css" />
+  </head>
+  <body>
+    <nav class="top-nav">
+      <div>
+        <strong>Giỏ hàng</strong>
+      </div>
+      <div class="nav-right">
+        <a class="plain" href="products.html">Sản phẩm</a>
+        <button id="logoutBtn" class="plain">Đăng xuất</button>
+      </div>
+    </nav>
+
+    <main class="products-page" style="width:100%; margin: 0 auto;">
+      <div id="cartRoot" style="width:1300px;"></div>
+    </main>
+
+    <script src="js/cart-page.js" type="module"></script>
+    <script type="module" src="cart-app/cart-app.js"></script>
+  </body>
+</html>
