@@ -23,6 +23,35 @@ const userSchema = new mongoose.Schema(
       enum: ['user', 'admin'],
       default: 'user',
     },
+    favorites: {
+      type: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Product',
+        },
+      ],
+      default: [],
+    },
+    recentlyViewed: {
+      type: [
+        {
+          product: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Product',
+          },
+          viewedAt: {
+            type: Date,
+            default: Date.now,
+          },
+          views: {
+            type: Number,
+            default: 1,
+            min: 1,
+          },
+        },
+      ],
+      default: [],
+    },
   },
   { timestamps: true }
 );

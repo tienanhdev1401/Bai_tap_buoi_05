@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
 const rateLimit = require('express-rate-limit');
 const { ValidationError } = require('express-validation');
 const dotenv = require('dotenv');
@@ -13,6 +12,7 @@ dotenv.config();
 
 const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
+const cartRoutes = require('./routes/cartRoutes');
 const typeDefs = require('./graphql/typeDefs');
 const resolvers = require('./graphql/resolvers');
 const User = require('./models/User');
@@ -23,11 +23,8 @@ connectDB(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/demo_security_prod
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
-
-// luôn trả về trang login khi truy cập root
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'login.html'));
+  res.json({ message: 'API demo đang hoạt động' });
 });
 
 const limiter = rateLimit({
@@ -39,13 +36,16 @@ app.use(limiter);
 
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/cart', cartRoutes);
 
 app.use((err, req, res, next) => {
   if (err instanceof ValidationError) {
     return res.status(err.statusCode).json(err);
   }
+  const status = err.statusCode || 500;
+  const message = err.statusCode ? err.message : 'Đã có lỗi xảy ra';
   console.error(err);
-  return res.status(500).json({ message: 'Đã có lỗi xảy ra' });
+  return res.status(status).json({ message });
 });
 
 async function start() {
