@@ -71,7 +71,7 @@ router.post('/checkout', authenticate, async (req, res) => {
   await cart.save();
 
   res.json({
-    message: 'Thanh toán giả lập thành công',
+    message: 'Thanh toán thành công',
     processedCount: selectedItems.length,
     productIds,
     stats,

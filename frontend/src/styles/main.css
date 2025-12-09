@@ -434,31 +434,193 @@ a.plain:hover {
 }
 
 .top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 40;
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   justify-content: space-between;
-  align-items: center;
-  padding: 16px 24px;
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.1);
+  gap: 18px;
+  padding: 18px 28px;
+  margin-bottom: 28px;
+  color: #f8fafc;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.92), rgba(13, 148, 136, 0.92));
+  border: 1px solid rgba(226, 232, 240, 0.22);
+  box-shadow: 0 24px 48px rgba(15, 23, 42, 0.18);
+  backdrop-filter: blur(18px);
 }
-.nav-left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
+.nav-left,
 .nav-right {
   display: flex;
   align-items: center;
+  gap: 18px;
+}
+.nav-left {
+  min-width: 0;
+}
+.nav-right {
+  flex-wrap: wrap;
+}
+.nav-titles {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.nav-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: inherit;
+}
+.nav-subtitle {
+  margin: 0;
+  font-size: 0.9rem;
+  color: rgba(226, 232, 240, 0.78);
+}
+.nav-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(15, 23, 42, 0.28);
+  border: 1px solid rgba(248, 250, 252, 0.24);
+  color: rgba(248, 250, 252, 0.88);
+}
+.nav-user {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.nav-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.3);
+  border: 1px solid rgba(248, 250, 252, 0.3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #f8fafc;
+}
+.nav-user-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.nav-user-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 180px;
+}
+.nav-user-role {
+  font-size: 0.76rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(226, 232, 240, 0.68);
+}
+.nav-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(248, 250, 252, 0.32);
+  background: rgba(15, 23, 42, 0.22);
+  color: #f8fafc;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+.nav-button:hover {
+  transform: translateY(-1px);
+  background: rgba(15, 23, 42, 0.3);
+  border-color: rgba(248, 250, 252, 0.45);
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.22);
+}
+.nav-button:focus-visible {
+  outline: 2px solid rgba(248, 250, 252, 0.6);
+  outline-offset: 2px;
+}
+.nav-button.secondary {
+  background: rgba(248, 250, 252, 0.18);
+  border-color: rgba(248, 250, 252, 0.32);
+  color: #e2e8f0;
+}
+.nav-button.secondary:hover {
+  background: rgba(248, 250, 252, 0.3);
+  color: #fff;
+}
+.nav-button.danger {
+  background: rgba(248, 113, 113, 0.28);
+  border-color: rgba(252, 165, 165, 0.55);
+  color: #fee2e2;
+}
+.nav-button.danger:hover {
+  background: rgba(248, 113, 113, 0.36);
+  border-color: rgba(254, 202, 202, 0.7);
+}
+.nav-button.nav-back {
+  background: rgba(248, 250, 252, 0.14);
+  border-color: rgba(248, 250, 252, 0.28);
+}
+.nav-button.nav-back:hover {
+  background: rgba(248, 250, 252, 0.26);
 }
 
-.top-nav .back-button {
-  margin-left: 0;
-  background: rgba(37, 99, 235, 0.08);
-  color: #2563eb;
-  border: 1px solid rgba(37, 99, 235, 0.3);
+@media (max-width: 960px) {
+  .top-nav {
+    position: static;
+  }
+
+  .nav-right {
+    justify-content: flex-start;
+  }
 }
-.top-nav .back-button:hover {
-  background: rgba(37, 99, 235, 0.16);
+
+@media (max-width: 720px) {
+  .top-nav {
+    padding: 16px 20px;
+    align-items: flex-start;
+  }
+
+  .nav-left,
+  .nav-right {
+    width: 100%;
+  }
+
+  .nav-left {
+    justify-content: flex-start;
+  }
+
+  .nav-right {
+    justify-content: flex-start;
+    gap: 12px;
+  }
+
+  .nav-user-name {
+    max-width: 140px;
+  }
 }
 
 .products-page {

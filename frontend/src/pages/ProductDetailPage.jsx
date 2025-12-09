@@ -73,6 +73,36 @@ function ProductDetailPage() {
   const favoriteProducts = detail?.favorites ?? [];
   const recentlyViewed = detail?.recentlyViewed ?? [];
 
+  const userDisplayName = useMemo(() => {
+    if (user?.name) return user.name;
+    if (user?.email) return user.email;
+    return 'Khách';
+  }, [user]);
+
+  const userRoleLabel = useMemo(() => {
+    if (!user?.role) return 'Chưa đăng nhập';
+    if (user.role === 'admin') return 'Quản trị viên';
+    if (user.role === 'user') return 'Thành viên';
+    return user.role;
+  }, [user]);
+
+  const userInitials = useMemo(() => {
+    const source = user?.name || user?.email || 'Khách';
+    return source
+      .trim()
+      .split(/\s+/)
+      .map((part) => part[0])
+      .filter(Boolean)
+      .slice(0, 2)
+      .join('')
+      .toUpperCase() || 'K';
+  }, [user]);
+
+  const navTitle = product?.name || 'Chi tiết sản phẩm';
+  const navSubtitle = product?.category
+    ? `Danh mục: ${product.category}`
+    : 'Xem thông tin sản phẩm chi tiết';
+
   const buyersCount = metrics?.buyersCount ?? 0;
   const purchasedQuantity = metrics?.purchasedQuantity ?? 0;
 
@@ -266,18 +296,28 @@ function ProductDetailPage() {
 
   return (
     <div>
-      <nav className="top-nav">
-        <div>
-          <button type="button" className="plain" onClick={() => navigate('/products')}>
-            &larr; Quay lại danh sách
+      <nav className="top-nav" aria-label="Thanh điều hướng chi tiết sản phẩm">
+        <div className="nav-left">
+          <button type="button" className="nav-button nav-back" onClick={() => navigate('/products')}>
+            ← Quay lại danh sách
           </button>
+          <div className="nav-titles">
+            <h1 className="nav-title">{navTitle}</h1>
+            <p className="nav-subtitle">{navSubtitle}</p>
+          </div>
         </div>
         <div className="nav-right">
-          <button type="button" className="plain" onClick={() => navigate('/cart')}>
+          <button type="button" className="nav-button secondary" onClick={() => navigate('/cart')}>
             Giỏ hàng
           </button>
-          <span>{user ? `${user.name} (${user.role})` : 'Khách'}</span>
-          <button type="button" className="plain" onClick={handleLogout}>
+          <div className="nav-user">
+            <span className="nav-avatar" aria-hidden="true">{userInitials}</span>
+            <div className="nav-user-meta">
+              <span className="nav-user-name">{userDisplayName}</span>
+              <span className="nav-user-role">{userRoleLabel}</span>
+            </div>
+          </div>
+          <button type="button" className="nav-button danger" onClick={handleLogout}>
             Đăng xuất
           </button>
         </div>

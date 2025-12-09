@@ -283,22 +283,56 @@ function ProductsPage() {
     navigate('/login', { replace: true });
   };
 
-  const currentUserLabel = useMemo(() => {
-    if (!user) return 'Khách';
-    return `${user.name} (${user.role})`;
+  const userDisplayName = useMemo(() => {
+    if (user?.name) return user.name;
+    if (user?.email) return user.email;
+    return 'Khách';
   }, [user]);
 
+  const userRoleLabel = useMemo(() => {
+    if (!user?.role) return 'Chưa đăng nhập';
+    if (user.role === 'admin') return 'Quản trị viên';
+    if (user.role === 'user') return 'Thành viên';
+    return user.role;
+  }, [user]);
+
+  const userInitials = useMemo(() => {
+    const source = user?.name || user?.email || 'Khách';
+    return source
+      .trim()
+      .split(/\s+/)
+      .map((part) => part[0])
+      .filter(Boolean)
+      .slice(0, 2)
+      .join('')
+      .toUpperCase() || 'K';
+  }, [user]);
   const handleOpenDetail = (id) => {
     navigate(`/products/${id}`);
   };
 
   return (
     <div>
-      <nav className="top-nav">
-        <strong>Danh sách sản phẩm</strong>
+      <nav className="top-nav" aria-label="Thanh điều hướng sản phẩm">
+        <div className="nav-left">
+          <span className="nav-badge">Cửa hàng</span>
+          <div className="nav-titles">
+            <h1 className="nav-title">Danh sách sản phẩm</h1>
+          </div>
+          
+        </div>
         <div className="nav-right">
-          <span id="currentUser">{currentUserLabel}</span>
-          <button type="button" className="plain" onClick={handleLogout}>
+          <button type="button" className="nav-button secondary" onClick={() => navigate('/cart')}>
+            Giỏ hàng
+          </button>
+          <div className="nav-user">
+            <span className="nav-avatar" aria-hidden="true">{userInitials}</span>
+            <div className="nav-user-meta">
+              <span className="nav-user-name">{userDisplayName}</span>
+              <span className="nav-user-role">{userRoleLabel}</span>
+            </div>
+          </div>
+          <button type="button" className="nav-button danger" onClick={handleLogout}>
             Đăng xuất
           </button>
         </div>
