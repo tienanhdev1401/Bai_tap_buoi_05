@@ -223,13 +223,45 @@ function CartView({ token }) {
     setConfirmOpen(false);
   };
 
-  const summary = useMemo(
-    () => ({
-      totalItems: totals?.totalQuantity ?? 0,
-      subtotal: totals?.totalPrice ?? 0,
-    }),
-    [totals],
-  );
+  const summary = useMemo(() => {
+    const computed = selectedItems.reduce(
+      (acc, item) => {
+        const unitPrice = Number(item.product?.price) || 0;
+        const rawSubtotal = Number(item.subtotal);
+        const subtotal = Number.isFinite(rawSubtotal) ? rawSubtotal : unitPrice * item.quantity;
+        return {
+          quantity: acc.quantity + item.quantity,
+          subtotal: acc.subtotal + subtotal,
+        };
+      },
+      { quantity: 0, subtotal: 0 },
+    );
+
+    if (selectedItems.length > 0) {
+      return {
+        totalItems: computed.quantity,
+        subtotal: computed.subtotal,
+      };
+    }
+
+    const serverSelectedQuantity = Number(totals?.selectedQuantity);
+    const serverSelectedPrice = Number(totals?.selectedPrice);
+    const serverTotalQuantity = Number(totals?.totalQuantity);
+    const serverTotalPrice = Number(totals?.totalPrice);
+
+    return {
+      totalItems: Number.isFinite(serverSelectedQuantity)
+        ? serverSelectedQuantity
+        : Number.isFinite(serverTotalQuantity)
+        ? serverTotalQuantity
+        : 0,
+      subtotal: Number.isFinite(serverSelectedPrice)
+        ? serverSelectedPrice
+        : Number.isFinite(serverTotalPrice)
+        ? serverTotalPrice
+        : 0,
+    };
+  }, [selectedItems, totals?.selectedQuantity, totals?.selectedPrice, totals?.totalQuantity, totals?.totalPrice]);
 
   const isMutating = addState.loading || selectState.loading || checkoutLoading;
 
@@ -274,16 +306,6 @@ function CartView({ token }) {
         </div>
         {cartItems.length > 0 && (
           <div className="cart-actions">
-            <Button
-              variant="secondary"
-              onClick={handleApplySelection}
-              disabled={selectedDraft.size === 0 || checkoutLoading}
-            >
-              Lưu lựa chọn
-            </Button>
-            <Button variant="primary" onClick={handleCheckout} disabled={selectedDraft.size === 0 || isMutating}>
-              Thanh toán các sản phẩm đã chọn
-            </Button>
           </div>
         )}
         {checkoutError && (
