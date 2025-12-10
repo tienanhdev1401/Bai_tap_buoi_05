@@ -51,6 +51,10 @@ function LoginPage() {
     }
   };
 
+  const handleSwitchToRegister = () => {
+    navigate('/register');
+  };
+
   return (
     <div className="auth-page">
       <div className="glass-card">
@@ -90,6 +94,18 @@ function LoginPage() {
         </form>
         <div className="result" id="loginResult">
           {result}
+        </div>
+        <div className="auth-switch">
+          Chưa có tài khoản?
+          {' '}
+          <button
+            type="button"
+            className="link-button"
+            onClick={handleSwitchToRegister}
+            disabled={submitting}
+          >
+            Đăng ký ngay
+          </button>
         </div>
       </div>
     </div>
