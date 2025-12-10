@@ -18,7 +18,7 @@ function LoginPage() {
       nextErrors.email = 'Email không được để trống';
     }
     if (!password.trim() || password.length < 6) {
-      nextErrors.password = 'Mật khẩu tối thiểu 6 ký tự';
+      nextErrors.password = 'Mật khẩu không được để trống';
     }
     setErrors(nextErrors);
     return !nextErrors.email && !nextErrors.password;
