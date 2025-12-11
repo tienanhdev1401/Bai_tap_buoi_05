@@ -26,6 +26,7 @@ function serialiseCart(cartDoc) {
             imageUrl: product.imageUrl,
             description: product.description,
             category: product.category,
+            stock: typeof product.stock === 'number' ? product.stock : 0,
           }
         : null,
       subtotal: price * item.quantity,
@@ -90,11 +91,22 @@ const resolvers = {
         throw new Error('Không tìm thấy sản phẩm');
       }
 
+      const maxStock = Number(product.stock ?? 0);
+      if (maxStock <= 0) {
+        throw new Error('Sản phẩm này hiện đã hết hàng');
+      }
+
       const cart = await getOrCreateCart(user.id);
       const existingItem = cart.items.find((item) => {
         const itemProductId = item.product?._id ? item.product._id.toString() : item.product.toString();
         return itemProductId === productId;
       });
+
+      const currentQuantity = existingItem ? existingItem.quantity : 0;
+      const desiredQuantity = currentQuantity + quantity;
+      if (desiredQuantity > maxStock) {
+        throw new Error(`Chỉ còn ${maxStock} sản phẩm trong kho`);
+      }
 
       if (existingItem) {
         existingItem.quantity += quantity;
@@ -120,6 +132,23 @@ const resolvers = {
         if (quantity <= 0) {
           targetItem.deleteOne();
         } else {
+          const productId = targetItem.product?._id ? targetItem.product._id : targetItem.product;
+          const product = await Product.findById(productId);
+          if (!product) {
+            targetItem.deleteOne();
+            await cart.save();
+            throw new Error('Không tìm thấy sản phẩm, đã xoá khỏi giỏ');
+          }
+
+          const maxStock = Number(product.stock ?? 0);
+          if (maxStock <= 0) {
+            throw new Error('Sản phẩm này hiện đã hết hàng');
+          }
+
+          if (quantity > maxStock) {
+            throw new Error(`Chỉ còn ${maxStock} sản phẩm trong kho`);
+          }
+
           targetItem.quantity = quantity;
         }
       }

@@ -72,6 +72,8 @@ function ProductDetailPage() {
   const similarProducts = detail?.similarProducts ?? [];
   const favoriteProducts = detail?.favorites ?? [];
   const recentlyViewed = detail?.recentlyViewed ?? [];
+  const availableStock = Number(product?.stock ?? 0);
+  const isOutOfStock = product ? availableStock <= 0 : false;
 
   const userDisplayName = useMemo(() => {
     if (user?.name) return user.name;
@@ -132,8 +134,9 @@ function ProductDetailPage() {
       { label: 'Khách mua', value: formatNumber(buyersCount) },
       { label: 'Số lượng đã bán', value: formatNumber(purchasedQuantity) },
       { label: 'Bình luận', value: formatNumber(metrics?.commentsCount ?? comments.length) },
+      { label: 'Tồn kho', value: isOutOfStock ? '0' : formatNumber(product?.stock) },
     ],
-    [metrics, buyersCount, purchasedQuantity, comments.length],
+    [metrics, buyersCount, purchasedQuantity, comments.length, product?.stock, isOutOfStock],
   );
 
   const originalPrice = useMemo(() => {
@@ -176,6 +179,10 @@ function ProductDetailPage() {
   const specRows = useMemo(() => {
     const rows = [
       { label: 'Danh mục', value: product?.category || 'Đang cập nhật' },
+      {
+        label: 'Tồn kho',
+        value: isOutOfStock ? 'Hết hàng' : `${formatNumber(product?.stock)} sản phẩm`,
+      },
       { label: 'Mã sản phẩm', value: product?.id || product?._id || 'Đang cập nhật' },
       { label: 'Ngày tạo', value: formatDate(product?.createdAt) || 'Đang cập nhật' },
       { label: 'Cập nhật lần cuối', value: formatDate(product?.updatedAt) || 'Đang cập nhật' },
@@ -225,6 +232,10 @@ function ProductDetailPage() {
   };
 
   const handleAddToCart = async () => {
+    if (isOutOfStock) {
+      showStatus('Sản phẩm hiện đã hết hàng', true);
+      return;
+    }
     setCartLoading(true);
     try {
       const mutation = `
@@ -375,6 +386,12 @@ function ProductDetailPage() {
                 <span className="detail-price-note">Giá đã bao gồm VAT • Hỗ trợ trả góp 0%</span>
               </div>
 
+              <div className="detail-stock">
+                {isOutOfStock
+                  ? 'Sản phẩm hiện đã hết hàng'
+                  : `Số lượng còn lại: ${formatNumber(product.stock)} sản phẩm`}
+              </div>
+
               <div className="detail-promotion-card">
                 <div className="detail-promo-header">
                   <span className="detail-promo-title">Khuyến mãi - ưu đãi</span>
@@ -388,8 +405,13 @@ function ProductDetailPage() {
               </div>
 
               <div className="detail-actions">
-                <button type="button" className="detail-buy-now" onClick={handleAddToCart} disabled={cartLoading}>
-                  {cartLoading ? 'Đang thêm...' : 'Mua ngay'}
+                <button
+                  type="button"
+                  className="detail-buy-now"
+                  onClick={handleAddToCart}
+                  disabled={cartLoading || isOutOfStock}
+                >
+                  {isOutOfStock ? 'Hết hàng' : cartLoading ? 'Đang thêm...' : 'Mua ngay'}
                 </button>
                 <button
                   type="button"

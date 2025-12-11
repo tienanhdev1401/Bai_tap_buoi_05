@@ -6,6 +6,7 @@ const typeDefs = `#graphql
     imageUrl: String
     description: String
     category: String
+    stock: Int!
   }
 
   type CartItem {

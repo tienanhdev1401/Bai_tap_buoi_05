@@ -15,6 +15,7 @@ export const CART_FIELDS = gql`
         imageUrl
         description
         category
+        stock
       }
     }
     totals {

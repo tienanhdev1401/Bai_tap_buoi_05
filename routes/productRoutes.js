@@ -31,6 +31,7 @@ function toProductResponse(doc) {
     discountPercent: doc.discountPercent,
     isOnSale: doc.isOnSale,
     views: doc.views,
+    stock: doc.stock,
     tags: Array.isArray(doc.tags) ? doc.tags : [],
     createdAt: doc.createdAt,
     updatedAt: doc.updatedAt,
@@ -402,6 +403,20 @@ router.post('/:productId/purchase', authenticate, async (req, res) => {
     return res.status(404).json({ message: 'Không tìm thấy sản phẩm' });
   }
 
+  if (product.stock < numericQuantity) {
+    return res.status(400).json({ message: 'Sản phẩm không đủ hàng trong kho' });
+  }
+
+  const updatedProduct = await Product.findOneAndUpdate(
+    { _id: productId, stock: { $gte: numericQuantity } },
+    { $inc: { stock: -numericQuantity } },
+    { new: true }
+  );
+
+  if (!updatedProduct) {
+    return res.status(400).json({ message: 'Sản phẩm không đủ hàng trong kho' });
+  }
+
   await Purchase.findOneAndUpdate(
     { product: productId, user: req.user._id },
     { $inc: { quantity: numericQuantity } },
@@ -409,7 +424,7 @@ router.post('/:productId/purchase', authenticate, async (req, res) => {
   );
 
   const buyersCount = await Purchase.countDocuments({ product: productId });
-  res.json({ message: 'Đã ghi nhận mua hàng', buyersCount });
+  res.json({ message: 'Đã ghi nhận mua hàng', buyersCount, remainingStock: updatedProduct.stock });
 });
 
 module.exports = router;

@@ -22,6 +22,7 @@ const createProductValidation = {
     description: Joi.string().required(),
     category: Joi.string().required(),
     price: Joi.number().positive().required(),
+    stock: Joi.number().min(0).optional(),
     imageUrl: Joi.string().uri().allow('', null),
     discountPercent: Joi.number().min(0).max(100).optional(),
     isOnSale: Joi.boolean().optional(),

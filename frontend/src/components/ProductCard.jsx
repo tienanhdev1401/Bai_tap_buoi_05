@@ -1,5 +1,7 @@
 function ProductCard({ product, onAddToCart, onOpenDetail, isAdding }) {
   const productId = product._id || product.id;
+  const stock = typeof product.stock === 'number' ? product.stock : null;
+  const isOutOfStock = stock !== null && stock <= 0;
 
   const handleAdd = (event) => {
     event.stopPropagation();
@@ -29,6 +31,11 @@ function ProductCard({ product, onAddToCart, onOpenDetail, isAdding }) {
           <strong>{product.price.toLocaleString()} đ</strong>
           {product.isOnSale && <span className="badge sale">-{product.discountPercent}%</span>}
         </div>
+        {stock !== null && (
+          <small className={`meta${isOutOfStock ? ' warning' : ''}`}>
+            {isOutOfStock ? 'Hết hàng' : `Còn ${stock.toLocaleString()} sản phẩm`}
+          </small>
+        )}
         <small className="meta">{(product.views || 0).toLocaleString()} lượt xem</small>
       </div>
       <div className="card-actions">
@@ -36,9 +43,9 @@ function ProductCard({ product, onAddToCart, onOpenDetail, isAdding }) {
           type="button"
           className="add-to-cart-btn"
           onClick={handleAdd}
-          disabled={isAdding}
+          disabled={isAdding || isOutOfStock}
         >
-          {isAdding ? 'Đang thêm...' : 'Thêm vào giỏ'}
+          {isOutOfStock ? 'Hết hàng' : isAdding ? 'Đang thêm...' : 'Thêm vào giỏ'}
         </button>
       </div>
     </article>

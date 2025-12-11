@@ -248,6 +248,12 @@ function ProductsPage() {
       showFeedback('Bạn cần đăng nhập để thêm sản phẩm vào giỏ.', true);
       return;
     }
+    const targetProduct = products.find((item) => (item._id || item.id) === productId);
+    const stock = targetProduct && typeof targetProduct.stock === 'number' ? targetProduct.stock : null;
+    if (stock !== null && stock <= 0) {
+      showFeedback('Sản phẩm hiện đã hết hàng', true);
+      return;
+    }
     setAddingProductId(productId);
     try {
       const mutation = `

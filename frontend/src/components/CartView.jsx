@@ -44,6 +44,20 @@ function CartView({ token }) {
   const cartItems = data?.cart?.items ?? EMPTY_LIST;
   const totals = data?.cart?.totals;
 
+  const extractErrorMessage = useCallback((err, fallback = 'Đã xảy ra lỗi') => {
+    if (!err) return fallback;
+    if (Array.isArray(err.graphQLErrors) && err.graphQLErrors.length) {
+      return err.graphQLErrors[0]?.message || fallback;
+    }
+    if (err.networkError?.result?.errors?.length) {
+      return err.networkError.result.errors[0]?.message || fallback;
+    }
+    if (err.message) {
+      return err.message;
+    }
+    return fallback;
+  }, []);
+
   useEffect(() => {
     async function fetchProducts() {
       try {
@@ -58,6 +72,7 @@ function CartView({ token }) {
           id: product._id,
           name: product.name,
           price: product.price,
+          stock: typeof product.stock === 'number' ? product.stock : 0,
         }));
         setProducts(options);
       } catch (err) {
@@ -103,6 +118,13 @@ function CartView({ token }) {
         quantity: item.quantity,
         imageUrl: item.product.imageUrl,
         description: item.product.description,
+        product: {
+          stock: typeof item.product.stock === 'number' ? item.product.stock : 0,
+          name: item.product.name,
+          price: item.product.price,
+          imageUrl: item.product.imageUrl,
+          description: item.product.description,
+        },
       }));
   }, [cartItems]);
 
@@ -118,35 +140,66 @@ function CartView({ token }) {
 
   const handleAddToCart = useCallback(
     async (productId, quantity) => {
-      await addMutation({ variables: { productId, quantity } });
-      await refetch();
+      try {
+        await addMutation({ variables: { productId, quantity } });
+        await refetch();
+        setProductError(null);
+      } catch (err) {
+        const message = extractErrorMessage(err, 'Không thêm được sản phẩm vào giỏ');
+        setProductError(message);
+        throw new Error(message);
+      }
     },
-    [addMutation, refetch],
+    [addMutation, refetch, extractErrorMessage],
   );
 
   const handleIncrease = useCallback(
     async (item) => {
-      await updateMutation({ variables: { itemId: item.id, quantity: item.quantity + 1 } });
-      await refetch();
+      const nextQuantity = item.quantity + 1;
+      const stock = typeof item.product?.stock === 'number' ? item.product.stock : Infinity;
+      if (nextQuantity > stock) {
+        setProductError(`Chỉ còn ${Number.isFinite(stock) ? stock.toLocaleString() : 0} sản phẩm trong kho`);
+        return;
+      }
+      try {
+        await updateMutation({ variables: { itemId: item.id, quantity: nextQuantity } });
+        await refetch();
+        setProductError(null);
+      } catch (err) {
+        const message = extractErrorMessage(err, 'Không thể cập nhật số lượng');
+        setProductError(message);
+      }
     },
-    [updateMutation, refetch],
+    [updateMutation, refetch, extractErrorMessage],
   );
 
   const handleDecrease = useCallback(
     async (item) => {
       const nextQuantity = item.quantity - 1;
-      await updateMutation({ variables: { itemId: item.id, quantity: nextQuantity } });
-      await refetch();
+      try {
+        await updateMutation({ variables: { itemId: item.id, quantity: nextQuantity } });
+        await refetch();
+        setProductError(null);
+      } catch (err) {
+        const message = extractErrorMessage(err, 'Không thể cập nhật số lượng');
+        setProductError(message);
+      }
     },
-    [updateMutation, refetch],
+    [updateMutation, refetch, extractErrorMessage],
   );
 
   const handleRemove = useCallback(
     async (item) => {
-      await removeMutation({ variables: { itemId: item.id } });
-      await refetch();
+      try {
+        await removeMutation({ variables: { itemId: item.id } });
+        await refetch();
+        setProductError(null);
+      } catch (err) {
+        const message = extractErrorMessage(err, 'Không thể xoá sản phẩm');
+        setProductError(message);
+      }
     },
-    [removeMutation, refetch],
+    [removeMutation, refetch, extractErrorMessage],
   );
 
   const handleToggleSelection = (itemId) => {
@@ -284,6 +337,9 @@ function CartView({ token }) {
                   <strong>{item.name}</strong>
                   <span>{item.price.toLocaleString()} đ</span>
                 </div>
+                {typeof item.product?.stock === 'number' && (
+                  <span className="status-text">Tồn kho: {item.product.stock.toLocaleString()} sản phẩm</span>
+                )}
                 <CartItemCard
                   item={item}
                   onIncrease={handleIncrease}

@@ -17,9 +17,29 @@ function AddToCartForm({ products, onAdd, loading }) {
       return;
     }
 
+    const selectedProduct = products.find((item) => item.id === productId);
+    if (selectedProduct) {
+      const stock = typeof selectedProduct.stock === 'number' ? selectedProduct.stock : 0;
+      if (stock <= 0) {
+        setError('Sản phẩm đã hết hàng');
+        return;
+      }
+      if (quantity > stock) {
+        setError(`Chỉ còn ${stock} sản phẩm trong kho`);
+        return;
+      }
+    }
+
     setError(null);
-    await onAdd(productId, quantity);
-    setQuantity(1);
+    try {
+      const result = await onAdd(productId, quantity);
+      if (result !== false) {
+        setQuantity(1);
+      }
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Không thêm được sản phẩm vào giỏ';
+      setError(message);
+    }
   };
 
   return (
@@ -34,8 +54,8 @@ function AddToCartForm({ products, onAdd, loading }) {
           >
             <option value="">-- Chọn sản phẩm --</option>
             {products.map((product) => (
-              <option key={product.id} value={product.id}>
-                {product.name} - {product.price.toLocaleString()} đ
+              <option key={product.id} value={product.id} disabled={product.stock <= 0}>
+                {product.name} - {product.price.toLocaleString()} đ (Còn {product.stock ?? 0})
               </option>
             ))}
           </select>
